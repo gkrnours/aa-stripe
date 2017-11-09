@@ -415,6 +415,7 @@ class StripeSubscription(StripeBasicModel):
     stripe_subscription_id = models.CharField(max_length=255, blank=True, db_index=True)
     is_created_at_stripe = models.BooleanField(default=False)
     plan = models.ForeignKey(StripeSubscriptionPlan, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1, validators=[MinValueValidator(1)])
     user = models.ForeignKey(USER_MODEL, on_delete=models.CASCADE, related_name="stripe_subscriptions")
     customer = models.ForeignKey(StripeCustomer, on_delete=models.SET_NULL, null=True)
     status = models.CharField(
@@ -444,6 +445,7 @@ class StripeSubscription(StripeBasicModel):
             data = {
                 "customer": customer.stripe_customer_id,
                 "plan": self.plan.id,
+                "quantity": self.quantity,
                 "metadata": self.metadata,
                 "tax_percent": self.tax_percent,
             }
