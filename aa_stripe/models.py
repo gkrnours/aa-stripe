@@ -177,7 +177,6 @@ class StripeCoupon(StripeBasicModel):
     valid = models.BooleanField(
         default=False,
         help_text=_("Taking account of the above properties, whether this coupon can still be applied to a customer."))
-    created = models.DateTimeField()
     is_deleted = models.BooleanField(default=False)
     is_created_at_stripe = models.BooleanField(default=False)
 
