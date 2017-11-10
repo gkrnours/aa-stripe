@@ -61,6 +61,17 @@ class StripeCustomer(StripeBasicModel):
         self.save()
         return self
 
+    def update_at_stripe(self):
+        if not self.is_created_at_stripe:
+            raise StripeMethodNotAllowed()
+
+        stripe.api_key = stripe_settings.API_KEY
+        customer = stripe.Customer.create(
+            source=self.stripe_js_response["id"],
+            description="{user} id: {user.id}".format(user=self.user)
+        )
+
+
     @classmethod
     def get_latest_active_customer_for_user(cls, user):
         """Returns last active stripe customer for user"""
